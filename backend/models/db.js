@@ -22,11 +22,13 @@ const Register = sequelize.define(
     id: { type: DataTypes.INTEGER, primaryKey: true },
     username: { type: DataTypes.STRING, allowNull: false },
     company: { type: DataTypes.STRING, allowNull: false },
-    country: { type: DataTypes.STRING, allowNull: false }
+    country: { type: DataTypes.STRING, allowNull: false },
+    createdAt: { type: DataTypes.DATE, allowNull: false }
   },
   {
     tableName: 'Register',
-    timestamps: true
+    timestamps: true,
+    updatedAt: false
   }
 )
 
