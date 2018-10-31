@@ -1,0 +1,49 @@
+.container {
+  display: flex;
+  width: 80%;
+  margin: 0 auto;
+  font-size: 1.2em;
+  font-family: 'Radikal W01';
+  font-weight: 400;
+}
+
+.container>div {
+  padding: 50px;
+  flex: 1;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.form>* {
+  flex: 1;
+  font-size: 1.5em;
+  padding: 10px;
+  margin: 5px;
+}
+
+.registerBtn {
+  padding: 10px;
+  border: 1px black solid;
+  background-color: transparent;
+  transition: box-shadow .2s ease-in-out;
+}
+
+.registerBtn:hover {
+  box-shadow: 0 1px 2px 1px black;
+}
+
+.check>* {
+
+  font-size: 1.2em;
+  padding: 10px;
+}
+
+
+.statusBack {
+  color: #e64848;
+
+}

@@ -2,11 +2,13 @@ const express = require('express')
 const db = require('./models/db')
 const { ApolloServer } = require('apollo-server-express')
 const { typeDefs, resolvers } = require('./schema')
+const cors = require('cors')
 
-const PORT = 8081
+const PORT = 8080
 const endpoint = '/graphql'
 
 const app = express()
+app.use(cors('*'))
 
 const server = new ApolloServer({
   typeDefs,
