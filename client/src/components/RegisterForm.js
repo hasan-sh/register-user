@@ -79,7 +79,7 @@ class RegisterForm extends Component {
               }
             }}
           >
-            Register:
+            <span className="title"> UPINION CODING CHALLANGE:</span>
             <input
               value={username}
               onChange={this.onChange}

@@ -25,6 +25,11 @@
   margin: 5px;
 }
 
+.title {
+  margin: 0;
+  text-decoration: underline;
+}
+
 .registerBtn {
   padding: 10px;
   border: 1px black solid;
