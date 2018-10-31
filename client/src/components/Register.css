@@ -2,9 +2,6 @@
   display: flex;
   width: 80%;
   margin: 0 auto;
-  font-size: 1.2em;
-  font-family: 'Radikal W01';
-  font-weight: 400;
 }
 
 .container>div {
@@ -12,11 +9,15 @@
   flex: 1;
 }
 
+.error {
+  font-size: 2em;
+  color: red;
+}
+
 .form {
   display: flex;
   flex-direction: column;
 }
-
 
 .form>* {
   flex: 1;
@@ -46,7 +47,6 @@
   font-size: 1.2em;
   padding: 10px;
 }
-
 
 .statusBack {
   color: #e64848;
