@@ -19,7 +19,6 @@ class RegisterForm extends Component {
 
   onChange = e => {
     const { name, value } = e.target
-    console.log(name, value)
     this.setState({ [name]: value })
   }
 
@@ -75,6 +74,8 @@ class RegisterForm extends Component {
         </div>
       )
       this.setState({ timeEl, statusEl })
+    } else {
+      alert('Please fill in the required fields.')
     }
   }
   render() {
