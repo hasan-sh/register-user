@@ -10,6 +10,11 @@ const allowedCountries = [
   'RUSSIA'
 ]
 
+function validateCountry(inputCountry) {
+  const country = inputCountry.toUpperCase()
+  return allowedCountries.includes(country)
+}
+
 const resolvers = {
   Query: {
     hi: () => 'Hi, there!'
@@ -41,32 +46,7 @@ const resolvers = {
             time: Date.now()
           }
         })
-
-      // return models.Register.create(args)
-      //   .then(({ dataValues }) => {
-      //     return {
-      //       error: null,
-      //       success: true,
-      //       time: dataValues.createdAt
-      //     }
-      //   })
-      //   .catch(err => {
-      //     console.log('err', err)
-      //     const { message } = err.errors[0]
-      //     return {
-      //       error: message,
-      //       success: false,
-      //       time: Date.now()
-      //     }
-      //   })
-      // return register(args)
     }
   }
 }
-
-function validateCountry(inputCountry) {
-  const country = inputCountry.toUpperCase()
-  return allowedCountries.includes(country)
-}
-
 module.exports = resolvers

@@ -23,7 +23,7 @@ const typeDefs = gql`
       username: String!
       company: String!
       country: String!
-    ): RegisterResponse
+    ): RegisterResponse!
   }
 `
 

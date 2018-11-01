@@ -15,14 +15,6 @@ const REGISTER = gql`
 `
 
 class Register extends Component {
-  componentWillReceiveProps = nextProps => {
-    console.log(nextProps)
-  }
-  onChange = e => {
-    const { name, value } = e.target
-
-    this.setState({ [name]: value })
-  }
   render() {
     return (
       <Mutation mutation={REGISTER}>
