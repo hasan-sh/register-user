@@ -112,14 +112,15 @@ class RegisterForm extends Component {
             </button>
           </form>
         </div>
-        <hr />
-        <CheckStatus
-          username={username}
-          company={company}
-          country={country}
-          status={statusEl}
-          timeEl={timeEl}
-        />
+        {statusEl && (
+          <CheckStatus
+            username={username}
+            company={company}
+            country={country}
+            status={statusEl}
+            timeEl={timeEl}
+          />
+        )}
       </div>
     )
   }
@@ -127,14 +128,17 @@ class RegisterForm extends Component {
 
 function CheckStatus(props) {
   return (
-    <div className="check">
-      Registered:
-      <div>Username: {props.username}</div>
-      <div>Company: {props.company}</div>
-      <div>Country: {props.country}</div>
-      <div>{props.status}</div>
-      <div>{props.timeEl}</div>
-    </div>
+    <React.Fragment>
+      <hr />
+      <div className="check">
+        Registered:
+        <div>Username: {props.username}</div>
+        <div>Company: {props.company}</div>
+        <div>Country: {props.country}</div>
+        <div>{props.status}</div>
+        <div>{props.timeEl}</div>
+      </div>
+    </React.Fragment>
   )
 }
 
