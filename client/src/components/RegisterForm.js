@@ -19,6 +19,7 @@ class RegisterForm extends Component {
 
   onChange = e => {
     const { name, value } = e.target
+    console.log(name, value)
     this.setState({ [name]: value })
   }
 
