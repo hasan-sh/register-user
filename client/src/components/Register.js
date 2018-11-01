@@ -18,9 +18,9 @@ class Register extends Component {
   render() {
     return (
       <Mutation mutation={REGISTER}>
-        {(register, { data, error }) => {
+        {(register, { error }) => {
           if (error) return <div className="error">{error.message}</div>
-          return <RegisterFrom register={register} data={data} />
+          return <RegisterFrom register={register} />
         }}
       </Mutation>
     )

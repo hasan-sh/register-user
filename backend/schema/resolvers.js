@@ -22,12 +22,11 @@ const resolvers = {
   Mutation: {
     register: async (parent, { username, company, country }, { models }) => {
       try {
-        const validCountry = validateCountry(country)
-        if (!validCountry) throw Error('Country not valid')
-
         const user = await models.Register.findOne({ where: { username } })
+        const validCountry = validateCountry(country)
         if (user && !validCountry)
           throw Error('User exists and not valid country.')
+        if (!validCountry) throw Error('Country not valid')
         if (user) throw Error('User exists.')
 
         const { dataValues } = await models.Register.create({

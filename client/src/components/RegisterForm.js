@@ -12,40 +12,58 @@ class RegisterForm extends Component {
   }
   timer = null
 
+  componentWillUnmount = () => {
+    clearTimeout(this.timer)
+  }
+
   onChange = e => {
     const { name, value } = e.target
     this.setState({ [name]: value })
   }
 
-  clearStatus = () => {
-    this.setState({ timeEl: null, statusEl: null })
+  clearState = () => {
+    this.setState({
+      username: '',
+      country: '',
+      company: '',
+      timeEl: null,
+      statusEl: null
+    })
   }
 
-  componentWillUnmount = () => {
-    clearTimeout(this.timer)
-  }
-
-  componentWillReceiveProps = nextProps => {
-    const { data } = nextProps
-
-    let timeEl = null
-    let statusEl = null
-    if (data) {
+  onSubmit = async e => {
+    e.preventDefault()
+    const { username, company, country } = this.state
+    if (username && company && country) {
       const {
-        register: { error, success, time }
-      } = data
+        data: {
+          register: { error, time, success }
+        }
+      } = await this.props.register({
+        variables: {
+          username,
+          company,
+          country
+        }
+      })
+      let timeEl = null
+      let statusEl = null
       if (success) {
-        this.timer = setTimeout(this.clearStatus, 2000)
-        this.setState({ username: '', country: '', company: '' })
+        this.timer = setTimeout(this.clearState, 2000)
+        statusEl = (
+          <div>
+            {'Success: '}
+            <span className="statusBack">You have registered!</span>
+          </div>
+        )
+      } else if (error) {
+        statusEl = (
+          <div>
+            {'Error: '}
+            <span className="statusBack">{error}</span>
+          </div>
+        )
       }
-      statusEl = (
-        <div>
-          {!success ? 'Error: ' : 'Success: '}
-          <span className="statusBack">
-            {success ? 'You have registered!' : error}
-          </span>
-        </div>
-      )
       timeEl = (
         <div>
           Created At:{' '}
@@ -59,26 +77,11 @@ class RegisterForm extends Component {
   }
   render() {
     const { username, company, country, statusEl, timeEl } = this.state
-    const { register } = this.props
 
     return (
       <div className="container">
         <div>
-          <form
-            className="form"
-            onSubmit={e => {
-              e.preventDefault()
-              if (username && company && country) {
-                register({
-                  variables: {
-                    username,
-                    company,
-                    country
-                  }
-                })
-              }
-            }}
-          >
+          <form className="form" onSubmit={this.onSubmit}>
             <span className="title"> UPINION CODING CHALLANGE:</span>
             <input
               value={username}
