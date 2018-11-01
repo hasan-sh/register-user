@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import allowedEntries from '../allowedEntries'
 
 import './Register.css'
 
@@ -18,6 +19,7 @@ class RegisterForm extends Component {
 
   onChange = e => {
     const { name, value } = e.target
+    console.log(name, value)
     this.setState({ [name]: value })
   }
 
@@ -99,14 +101,14 @@ class RegisterForm extends Component {
               type="text"
               placeholder="Company"
             />
-            <input
-              value={country}
-              onChange={this.onChange}
-              required
-              name={'country'}
-              type="text"
-              placeholder="Country"
-            />
+            <select required name="country" onChange={this.onChange}>
+              <option value="">Select Country</option>
+              {allowedEntries.countries.map((country, i) => (
+                <option key={i} value={country}>
+                  {country}
+                </option>
+              ))}
+            </select>
             <button className="registerBtn" type="submit">
               Register
             </button>
