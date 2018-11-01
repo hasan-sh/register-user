@@ -1,4 +1,4 @@
-const { DataTypes, Sequelize } = require('sequelize')
+import { DataTypes, Sequelize } from 'sequelize'
 
 const sequelize = new Sequelize('upinionDb', null, null, {
   dialect: 'sqlite',
@@ -7,10 +7,10 @@ const sequelize = new Sequelize('upinionDb', null, null, {
 })
 
 sequelize.authenticate().then(
-  function(err) {
+  () => {
     console.log('Connection has been established successfully.')
   },
-  function(err) {
+  err => {
     console.log('Unable to connect to the database:', err)
   }
 )
@@ -36,7 +36,4 @@ const models = {
   Register
 }
 
-module.exports = {
-  sequelize,
-  models
-}
+export { sequelize, models }
