@@ -1,50 +1,35 @@
-const allowedCountries = [
-  'NETHERLANDS',
-  'SPAIN',
-  'FRANCE',
-  'GERMANY',
-  'BELGIUM',
-  'FINLAND',
-  'DENMARK',
-  'SWEDEN',
-  'RUSSIA'
-]
-
-function validateCountry(inputCountry) {
-  const country = inputCountry.toUpperCase()
-  return allowedCountries.includes(country)
-}
-
 const resolvers = {
   Query: {
     hi: () => 'Hi, there!'
   },
   Mutation: {
     register: async (parent, { username, company, country }, { models }) => {
-      try {
-        const user = await models.Register.findOne({ where: { username } })
-        const validCountry = validateCountry(country)
-        if (user && !validCountry)
-          throw Error('User exists and not valid country.')
-        if (!validCountry) throw Error('Country not valid')
-        if (user) throw Error('User exists.')
-
-        const { dataValues } = await models.Register.create({
-          username,
-          company,
-          country
-        })
+      // I know that I'm checking this in the front-end! But it makes me more comfortable.
+      if (!username || !company || !country) {
         return {
-          error: null,
-          success: true,
-          time: dataValues.createdAt
-        }
-      } catch (error) {
-        return {
-          error: error.message,
+          error: 'Missing Fields.',
           success: false,
           time: Date.now()
         }
+      }
+
+      const user = await models.Register.findOne({ where: { username } })
+      if (user) {
+        return {
+          error: 'User exists.',
+          success: false,
+          time: user.dataValues.createdAt
+        }
+      }
+      const { dataValues } = await models.Register.create({
+        username,
+        company,
+        country
+      })
+      return {
+        error: null,
+        success: true,
+        time: dataValues.createdAt
       }
     }
   }
