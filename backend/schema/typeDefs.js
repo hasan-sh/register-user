@@ -24,6 +24,7 @@ const typeDefs = gql`
       company: String!
       country: String!
     ): RegisterResponse!
+    createAllowedCountry(country: String!): String
   }
 `
 
