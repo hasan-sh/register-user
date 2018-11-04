@@ -14,15 +14,19 @@ const typeDefs = gql`
     time: String!
   }
 
+  type Country {
+    country: String!
+    countryId: Int!
+  }
   type Query {
-    hi: String
+    allowedCountries: [Country!]!
   }
 
   type Mutation {
     register(
       username: String!
       company: String!
-      country: String!
+      countryId: Int!
     ): RegisterResponse!
     createAllowedCountry(country: String!): String
   }

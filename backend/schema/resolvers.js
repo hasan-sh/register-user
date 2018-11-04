@@ -8,9 +8,11 @@ function sendResponse(error, success = false, time = Date.now()) {
 
 const resolvers = {
   Query: {
-    hi: () => 'Hi, there!'
+    allowedCountries: (parent, args, { models: { AllowedCountries } }) =>
+      AllowedCountries.findAll()
   },
   Mutation: {
+    // this mutation is just for us to test it. It should be removed on real-wolrd apps!!
     createAllowedCountry: (
       parent,
       { country },
@@ -21,36 +23,29 @@ const resolvers = {
         .catch(e => console.log('err', e))
     },
 
-    register: async (parent, { username, company, country }, { models }) => {
+    register: async (parent, { username, company, countryId }, { models }) => {
       // I know that I'm checking this in the front-end! But it makes me more comfortable.
-      if (!username || !company || !country) {
+      if (!username || !company || !countryId) {
         return sendResponse('Missing Fields.')
       }
       const user = await models.Register.findOne({ where: { username } })
       if (user) {
         return sendResponse('User exists.', false, user.dataValues.createdAt)
       }
-      const allowedCountry = await models.AllowedCountries.findOne({
-        where: { country: country.toUpperCase() }
-      })
 
-      if (allowedCountry) {
-        const {
-          dataValues: { countryId }
-        } = allowedCountry
-
+      try {
         const { dataValues } = await models.Register.create({
           username,
           company,
           countryId
         })
         return sendResponse(null, true, dataValues.createdAt)
-      } else {
+      } catch (error) {
         // Then the country is not allowed. Send info about the allowed ones.
         const allowedCountries = await models.AllowedCountries.findAll()
 
         return sendResponse(
-          `'${country}' is not allowed. Allowed Countries: ${allowedCountries
+          `Country is not allowed. Allowed Countries: ${allowedCountries
             .map(({ country }) => country)
             .join(' | ')}`
         )

@@ -22,7 +22,13 @@ const Register = sequelize.define(
     id: { type: DataTypes.INTEGER, primaryKey: true },
     username: { type: DataTypes.STRING, allowNull: false },
     company: { type: DataTypes.STRING, allowNull: false },
-    countryId: { type: DataTypes.INTEGER, allowNull: false },
+    countryId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'AllowedCountries',
+        key: 'countryId'
+      }
+    },
     createdAt: { type: DataTypes.DATE, allowNull: false }
   },
   {
@@ -50,9 +56,6 @@ const AllowedCountries = sequelize.define(
   },
   { tableName: 'AllowedCountries' }
 )
-
-AllowedCountries.hasMany(Register, { foreignKey: 'countryId' })
-Register.belongsTo(AllowedCountries, { foreignKey: 'countryId' })
 
 const models = {
   Register,
