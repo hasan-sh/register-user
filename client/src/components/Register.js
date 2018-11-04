@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
-import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
+import { Query } from 'react-apollo'
 
 import RegisterFrom from './RegisterForm'
 
-const REGISTER = gql`
-  mutation Register($username: String!, $country: String!, $company: String!) {
-    register(username: $username, country: $country, company: $company) {
-      error
-      success
-      time
+const GET_ALLOWED_COUNTRIES = gql`
+  {
+    allowedCountries {
+      country
+      countryId
     }
   }
 `
@@ -17,12 +16,12 @@ const REGISTER = gql`
 class Register extends Component {
   render() {
     return (
-      <Mutation mutation={REGISTER}>
-        {(register, { error }) => {
+      <Query query={GET_ALLOWED_COUNTRIES}>
+        {({ data, error }) => {
           if (error) return <div className="error">{error.message}</div>
-          return <RegisterFrom register={register} />
+          return <RegisterFrom data={data} />
         }}
-      </Mutation>
+      </Query>
     )
   }
 }

@@ -1,8 +1,18 @@
 import React, { Component } from 'react'
-import allowedEntries from '../allowedEntries'
 
+import { Mutation } from 'react-apollo'
+import gql from 'graphql-tag'
 import './Register.css'
 
+const REGISTER = gql`
+  mutation Register($username: String!, $countryId: Int!, $company: String!) {
+    register(username: $username, countryId: $countryId, company: $company) {
+      error
+      success
+      time
+    }
+  }
+`
 class RegisterForm extends Component {
   state = {
     username: '',
@@ -32,19 +42,28 @@ class RegisterForm extends Component {
     })
   }
 
-  onSubmit = async e => {
-    e.preventDefault()
+  onSubmit = async ({ event, register }) => {
+    event.preventDefault()
     const { username, company, country } = this.state
-    if (username && company && country) {
+
+    const options = document.querySelectorAll('#list option')
+    let countryId = ''
+    options.forEach(option => {
+      if (option.value === country) {
+        countryId = option.id
+      }
+    })
+
+    if (username && company && country && countryId) {
       const {
         data: {
           register: { error, time, success }
         }
-      } = await this.props.register({
+      } = await register({
         variables: {
           username,
           company,
-          country
+          countryId: parseInt(countryId, 10)
         }
       })
       let timeEl = null
@@ -75,56 +94,80 @@ class RegisterForm extends Component {
       )
       this.setState({ timeEl, statusEl })
     } else {
-      alert('Please fill in the required fields.')
+      const mes = !countryId
+        ? 'Please select from the country list.'
+        : 'Please fill in the required fields.'
+      alert(mes)
     }
   }
+
   render() {
     const { username, company, country, statusEl, timeEl } = this.state
-
+    const { data } = this.props
     return (
-      <div className="container">
-        <div>
-          <form className="form" onSubmit={this.onSubmit}>
-            <span className="title"> UPINION CODING CHALLANGE:</span>
-            <input
-              value={username}
-              onChange={this.onChange}
-              required
-              name="username"
-              type="text"
-              placeholder="Username"
-            />
-            <input
-              value={company}
-              onChange={this.onChange}
-              required
-              name={'company'}
-              type="text"
-              placeholder="Company"
-            />
-            <select required name="country" onChange={this.onChange}>
-              <option value="">Select Country</option>
-              {allowedEntries.countries.map((country, i) => (
-                <option key={i} value={country}>
-                  {country}
-                </option>
-              ))}
-            </select>
-            <button className="registerBtn" type="submit">
-              Register
-            </button>
-          </form>
-        </div>
-        {statusEl && (
-          <CheckStatus
-            username={username}
-            company={company}
-            country={country}
-            status={statusEl}
-            timeEl={timeEl}
-          />
-        )}
-      </div>
+      <Mutation mutation={REGISTER}>
+        {(register, { error }) => {
+          if (error) return <div className="error">{error.message}</div>
+          return (
+            <div className="container">
+              <div>
+                <form
+                  className="form"
+                  onSubmit={event => this.onSubmit({ event, register })}
+                >
+                  <span className="title"> UPINION CODING CHALLENGE:</span>
+                  <input
+                    type="text"
+                    name="username"
+                    required
+                    placeholder="Username"
+                    value={username}
+                    onChange={this.onChange}
+                  />
+                  <input
+                    type="text"
+                    name={'company'}
+                    required
+                    placeholder="Company"
+                    value={company}
+                    onChange={this.onChange}
+                  />
+                  <input
+                    type="search"
+                    name="country"
+                    required
+                    list="list"
+                    placeholder="Country"
+                    value={country}
+                    onChange={this.onChange}
+                  />
+                  <datalist id="list">
+                    {data &&
+                      data.allowedCountries &&
+                      data.allowedCountries.map(({ country, countryId }, i) => (
+                        <option key={i} id={countryId} value={country} />
+                      ))}
+                    }
+                  </datalist>
+
+                  <button className="registerBtn" type="submit">
+                    Register
+                  </button>
+                </form>
+              </div>
+              {statusEl && (
+                <CheckStatus
+                  username={username}
+                  company={company}
+                  country={country}
+                  status={statusEl}
+                  timeEl={timeEl}
+                />
+              )}
+            </div>
+          )
+        }}
+      </Mutation>
     )
   }
 }

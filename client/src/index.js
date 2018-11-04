@@ -8,7 +8,15 @@ import Register from './components/Register'
 import * as serviceWorker from './serviceWorker'
 
 const client = new ApolloClient({
-  uri: 'http://localhost:8080/graphql'
+  uri: 'http://localhost:8080/graphql',
+  cacheRedirects: {
+    Query: {
+      allowedCountries: (_, { id }, { getCacheKey }) => {
+        console.log(id)
+        return getCacheKey({ id, __typename: 'AllowedCountries' })
+      }
+    }
+  }
 })
 
 const App = () => (
